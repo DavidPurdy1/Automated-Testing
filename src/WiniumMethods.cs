@@ -120,12 +120,13 @@ namespace ConsoleTests.src {
         }
         public string GetTopLevelWindowInformation(string infotype) {
             method = MethodBase.GetCurrentMethod().Name;
+            WindowData data = new WindowData();
+            data.GetActiveWindow();
+
             if (infotype.Equals("process")) {
-                WindowData data = new WindowData();
-                Print(method, data.WindowProcess); 
                 return data.WindowProcess; 
             }
-            return new WindowData().WindowTitle; 
+            return data.WindowTitle; 
         }
         public Screenshot GetScreenshot() {
             return ((ITakesScreenshot)driver).GetScreenshot();

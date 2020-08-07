@@ -1,8 +1,8 @@
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using System.Text;
-using System.Windows.Forms;
 
-namespace System.Runtime.InteropServices
+namespace ConsoleTests
 {
     /// <summary>
     /// This is used to get the name of the current window in focus as well as the process of the window. 
@@ -40,7 +40,6 @@ namespace System.Runtime.InteropServices
 
                 WindowProcess = Process.GetProcessById((int)lpdwProcessId).ProcessName;
             }
-            MessageBox.Show("Made it");
         }
     }
 }

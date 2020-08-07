@@ -61,7 +61,6 @@ namespace ConsoleTests.src
                 file.WriteLine("Tester: " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 file.WriteLine("App Version: " + version);
                 file.WriteLine("App Name: " + ConfigurationManager.AppSettings.Get("IntactPath"));
-                Print(method, "It made it to writing the file");
 
                 //tests failed and passed on New Line
                 int i = 0;
@@ -82,22 +81,21 @@ namespace ConsoleTests.src
         }
         public void CheckForInterruptions()
         {
-            method = MethodBase.GetCurrentMethod().Name;
-            Print(method, m.GetTopLevelWindowInformation("process"));
-            Print(method, m.GetTopLevelWindowInformation(""));
-
             if (m.GetTopLevelWindowInformation("process") != "Intact")
             {
-                Print(method, "The current top window isn't intact, test interrupted");
+                Print(MethodBase.GetCurrentMethod().Name, "The current top window isn't intact, test interrupted");
                 throw new AssertInconclusiveException("The current top window is not intact, test interrupted"); 
             }
         }
         public void CheckForIntactErrorMessage() {
-            Process[] pname = Process.GetProcessesByName("AD Sync Error");
-            if (pname.Length == 0)
-                Print(method, "nothing");
-            else 
-                Print(method, "present");
+            Process[] pname = Process.GetProcessesByName("dotnet.exe"); //fix 
+            if (pname.Length == 0) {
+                Print(method, "TRRUE");
+            }
+            else {
+                Print(method, "False");
+            }
+
         }
         public void SendToDB()
         {
