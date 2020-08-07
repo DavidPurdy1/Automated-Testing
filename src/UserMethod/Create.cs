@@ -109,11 +109,7 @@ namespace ConsoleTests.src {
             m.Click(By.Name("&Close"));
             Print(method, "Finished");
         }
-        /**Creates docs
-        * numOfDocs: specifies how many to create
-        * if isPDF = true --> gets pdf from the directory, else tif 
-        * docPath: allows you to specify the directory of docs, default is set in config
-        * fileNumber: allows you to specify which file you want to use
+        /**Faster Creation of a Document
         */
         public void SimpleCreateDocument(bool isPDF = true, string docPath = "", int? fileNumber = 0) {
             method = MethodBase.GetCurrentMethod().Name;
@@ -163,6 +159,12 @@ namespace ConsoleTests.src {
             m.Click(By.Id("btnClose"));
             Print(method, "Finished");
         }
+        /**Creates docs
+     * numOfDocs: specifies how many to create
+     * if isPDF = true --> gets pdf from the directory, else tif 
+     * docPath: allows you to specify the directory of docs, default is set in config
+     * fileNumber: allows you to specify which file you want to use
+     */
         public void CreateDocument(int? numOfDocs = 1, bool isPDF = true, string docPath = "", int? fileNumber = 0) {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
@@ -228,6 +230,9 @@ namespace ConsoleTests.src {
                 Print(method, "Finished");
             }
         }
+        /**Unable to implement without change to Winium Source code
+         * Fairly simple change
+         */ 
         private void AddAnnotations() {
             Print(method, "x: " + Cursor.Position.X + " y: " + Cursor.Position.Y);
             m.Click(By.Id("lblType"));

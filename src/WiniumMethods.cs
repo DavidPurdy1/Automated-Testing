@@ -4,7 +4,7 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Winium;
 using System;
 using System.Reflection;
-
+using System.Runtime.InteropServices;
 
 namespace ConsoleTests.src {
     /// <summary>
@@ -117,6 +117,15 @@ namespace ConsoleTests.src {
         }
         public bool IsElementPresent(By by, IWebElement parent) {
             return parent.FindElements(by).Count > 0;
+        }
+        public string GetTopLevelWindowInformation(string infotype) {
+            method = MethodBase.GetCurrentMethod().Name;
+            if (infotype.Equals("process")) {
+                WindowData data = new WindowData();
+                Print(method, data.WindowProcess); 
+                return data.WindowProcess; 
+            }
+            return new WindowData().WindowTitle; 
         }
         public Screenshot GetScreenshot() {
             return ((ITakesScreenshot)driver).GetScreenshot();

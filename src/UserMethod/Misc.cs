@@ -29,7 +29,7 @@ namespace ConsoleTests.src {
             Print(method, " Finished");
         }
 
-        //NOT FINISHED
+        //Uncommon and full functionality not added to some of these
         public void OpenUtil() {
             //Document indexing
             window = m.Locate(By.Name("&Administration"));
@@ -122,6 +122,7 @@ namespace ConsoleTests.src {
             m.Click(By.Id("rbnClose"), window);
         }
         public void Portfolio(string[] definitionNames = null) {
+            //not finished
             //open and name portfolio
             window = m.Locate(By.Name("&Administration"), m.Locate(By.Name("radMenu1")));
             m.Click(By.Name("Portfolios"), window);

@@ -22,12 +22,13 @@ namespace ConsoleTests.src {
             debugLog = log;
             options.ApplicationPath = ConfigurationManager.AppSettings.Get("IntactPath");
             driver = new WiniumDriver(ConfigurationManager.AppSettings.Get("DriverPath"), options);
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(double.Parse(ConfigurationManager.AppSettings.Get("DriverPath"))));
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(double.Parse(ConfigurationManager.AppSettings.Get("ImplicitWait"))));
             action = new Actions(driver);
             m = new WiniumMethods(driver, debugLog);
         }
         #endregion
 
+        #region
         public IntactSetup Setup() {
             return new IntactSetup(m); 
         }
@@ -46,7 +47,7 @@ namespace ConsoleTests.src {
         public Misc Misc() {
             return new Misc(m, action,debugLog); 
         }
-
+        #endregion
         public void Print(string method, string toPrint) {
             debugLog.Info(method + " " + toPrint);
         }

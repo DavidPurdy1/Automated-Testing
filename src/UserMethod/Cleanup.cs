@@ -6,28 +6,29 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Windows.Forms;
 
-namespace ConsoleTests.src {
+namespace ConsoleTests.src
+{
     /// <summary>
     /// Class containing methods used at the end of a test case or test run.
     /// </summary>
-    public class Cleanup {
+    public class Cleanup
+    {
         readonly WiniumMethods m;
         string method = "";
         readonly ILog debugLog;
 
-        public Cleanup(WiniumMethods m, ILog debugLog) {
+        public Cleanup(WiniumMethods m, ILog debugLog)
+        {
             this.m = m;
             this.debugLog = debugLog;
         }
-        /** 
-         * Found in test cleanup
-         * saves screenshot in the directory specified, closes top window, returns path for the fail file
-         */
-        public string OnFail(string testName, string folderPath = "") {
-            if (folderPath.Length < 2) {
-                folderPath = ConfigurationManager.AppSettings.Get("AutomationScreenshots");
-            }
+        public string OnFail(string testName, string folderPath = "")
+        {
+            if (folderPath.Length < 2){folderPath = ConfigurationManager.AppSettings.Get("AutomationScreenshots");}
 
             //YYYY-MM-DD__HH-MM-SS
             string dateAndTime = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "__"
@@ -36,15 +37,10 @@ namespace ConsoleTests.src {
             //creates file, stores screenshot in path
             string path = Path.Combine(folderPath, testName + "_" + dateAndTime);
             m.GetScreenshot().SaveAsFile(path + ".PNG", ImageFormat.Png);
-
-            //CloseWindow();
-
             return path;
         }
-        /** 
-         * Writes tests passed and failed in a file that can be set in config, appends to file and give the path to the screenshot
-         */
-        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames, List<string> imagePaths) {
+        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames,List<string> testsInconclusiveNames, List<string> imagePaths)
+        {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
 
@@ -54,7 +50,8 @@ namespace ConsoleTests.src {
 
             //writes the result file information
             using (StreamWriter file =
-            new StreamWriter(ConfigurationManager.AppSettings.Get("TestResultFiles") + dateAndTime + ".txt", false)) {
+            new StreamWriter(ConfigurationManager.AppSettings.Get("TestResultFiles") + dateAndTime + ".txt", false))
+            {
                 var versionInfo = FileVersionInfo.GetVersionInfo(ConfigurationManager.AppSettings.Get("IntactPath"));
                 string version = versionInfo.FileVersion;
                 file.WriteLine("");
@@ -64,21 +61,55 @@ namespace ConsoleTests.src {
                 file.WriteLine("Tester: " + System.Security.Principal.WindowsIdentity.GetCurrent().Name);
                 file.WriteLine("App Version: " + version);
                 file.WriteLine("App Name: " + ConfigurationManager.AppSettings.Get("IntactPath"));
+                Print(method, "It made it to writing the file");
 
                 //tests failed and passed on New Line
                 int i = 0;
-                foreach (string name in testsFailedNames) {
+                foreach (string name in testsFailedNames)
+                {
                     file.WriteLine("failed| " + name);
                     file.WriteLine(imagePaths[i]);
                     i++;
                 }
-                foreach (string name in testsPassedNames) {
+                foreach (string name in testsPassedNames)
+                {
                     file.WriteLine("passed| " + name);
+                }
+                foreach (string name in testsInconclusiveNames) {
+                    file.WriteLine("cancel| " + name);
                 }
             }
         }
-        /**Take images from folder and put them on a word doc
-         * Put at the end of tests.
+        public void CheckForInterruptions()
+        {
+            method = MethodBase.GetCurrentMethod().Name;
+            Print(method, m.GetTopLevelWindowInformation("process"));
+            Print(method, m.GetTopLevelWindowInformation(""));
+
+            if (m.GetTopLevelWindowInformation("process") != "Intact")
+            {
+                Print(method, "The current top window isn't intact, test interrupted");
+                throw new AssertInconclusiveException("The current top window is not intact, test interrupted"); 
+            }
+        }
+        public void CheckForIntactErrorMessage() {
+            Process[] pname = Process.GetProcessesByName("AD Sync Error");
+            if (pname.Length == 0)
+                Print(method, "nothing");
+            else 
+                Print(method, "present");
+        }
+        public void SendToDB()
+        {
+            string connectionString = ConfigurationManager.AppSettings.Get("DBConnection");
+            DataExporter exporter = new DataExporter(connectionString);
+            exporter.ParseFile(new TestData());
+        }
+        public void CloseDriver()
+        {
+            m.CloseDriver();
+        }
+        /**Unimplemented
          */
         public void WriteFailToWord() {
             //method = MethodBase.GetCurrentMethod().Name;
@@ -114,16 +145,8 @@ namespace ConsoleTests.src {
             //wordDoc.SaveAs2(ConfigurationManager.AppSettings.Get("TestFailedDocs"));
             //word.Quit();
         }
-        public void SendToDB() {
-            string connectionString = ConfigurationManager.AppSettings.Get("DBConnection");
-            DataExporter exporter = new DataExporter(connectionString);
-            exporter.ParseFile(new TestData());
-        }
-        public void CloseDriver() {
-            m.CloseDriver();
-        }
-
-        public void Print(string method, string toPrint) {
+        public void Print(string method, string toPrint)
+        {
             debugLog.Info(method + " " + toPrint);
         }
     }

@@ -114,7 +114,8 @@ namespace ConsoleTests.src {
             m.Click(By.Id("btnClose"), window);
         }
         /**
-         * Collects documents by all definition from InZone. Returns true if the definition recognized is the same name as a file in directory
+         * Collects documents by all definition from InZone.
+         * Returns true if the definition recognized is the same name as a file in directory
          */
         public void InZone() {
             method = MethodBase.GetCurrentMethod().Name;
@@ -151,7 +152,7 @@ namespace ConsoleTests.src {
          * Method copies over files from one directory to another: Each time before InZone collects this is going to put files in the collector folder
          * Verify that the startPath always has files in it and those files shouldn't be removed from this folder when collected.
          */
-        public void AddDocsToCollector() {
+        private void AddDocsToCollector() {
             method = MethodBase.GetCurrentMethod().Name;
             string startPath = ConfigurationManager.AppSettings.Get("InZoneStartPath");
             string endPath = ConfigurationManager.AppSettings.Get("InZoneCollectorPath");

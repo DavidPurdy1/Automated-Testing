@@ -13,7 +13,7 @@ namespace ConsoleTests.src {
     /// Methods for Search and Recognize Feature
     /// </summary>
     public class SearchRecognize {
-        #region
+        #region fields
         IWebElement window;
         readonly WiniumMethods m;
         string method = "";
@@ -37,12 +37,12 @@ namespace ConsoleTests.src {
             Thread.Sleep(5000);
             m.Click(By.Id("btnClose"));
         }
-        /**
+        /** Tests Intact Recognition
          * definitionName: definition of what you want to recognize
          * documentName: document name
          * input: string to search to see if the page recognizes it
          */
-        public void Recognition(string definitionName, string documentName, string input) { // test to make sure there are documents in recognize
+        public void Recognition(string definitionName, string documentName, string input) {
             CreateDocumentForRecognize(); 
             AddRecognition();
             OpenOrganizer();
@@ -68,7 +68,7 @@ namespace ConsoleTests.src {
             m.Click(By.Id("btnCancel"));
             m.Click(By.Id("btnClose"));
         }
-        /** Searches intact for a keyword, if not found fails the test
+        /** Searches intact for a keyword
         *  searchInput: string put in searchBar
         */
         public void Search(string searchInput) {
@@ -92,7 +92,8 @@ namespace ConsoleTests.src {
             m.Click(By.Name("Organizer"));
             Print(method, " Finished");
         }
-
+        /**Creates a simple document that is recognized
+         */
         private void CreateDocumentForRecognize(bool isPDF = true, string docPath = "", int? fileNumber = 0) {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");

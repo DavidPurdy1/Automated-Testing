@@ -6,7 +6,7 @@ using System.IO;
 
 namespace ConsoleTests.src {
     /// <summary>
-    /// Exports Parsed Data from the .txt file the tests output on cleanup and sends that to sql
+    /// Exports Parsed Data from the .txt file the tests output on cleanup and sends that to sql tables
     /// </summary>
     class DataExporter {
         private readonly SqlConnection connection;
@@ -65,7 +65,7 @@ namespace ConsoleTests.src {
             foreach (string file in Directory.EnumerateFiles(ConfigurationManager.AppSettings.Get("FileLocation"))) {
                 string[] lines = File.ReadAllLines(file);
 
-
+                //all the information for the test runs is here
                 data.CreatedDate = DateTime.Parse(lines[1].Substring(0, lines[1].Length - 2));
                 data.TestsPassed = int.Parse(lines[2].Substring(14));
                 data.TestsFailed = int.Parse(lines[3].Substring(14));
@@ -75,11 +75,17 @@ namespace ConsoleTests.src {
 
                 AddToTestRunTable(data);
 
+                //The test case names, test case status, image path all assigned here.
+                //Some of the data from above is used in the test case table
                 int i = 7;
                 while (i < lines.Length) {
                     data.TestName = lines[i].Substring(8);
-
-                    if (lines[i].Substring(0, 8).Equals("passed| ")) {
+                    if (lines[i].Substring(0, 8).Equals("cancel| ")){
+                        data.TestStatus = 3;
+                        data.ImagePath = null;
+                        i++;
+                    }
+                    else if (lines[i].Substring(0, 8).Equals("passed| ")) {
                         data.TestStatus = 1;
                         data.ImagePath = null;
                         i++;
