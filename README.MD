@@ -1,9 +1,49 @@
 # Console Tests
 
-These tests are ran from the web service connected to the dashboard app 
+A library built for Automated testing of Intact using Winium Driver.
 
-The difference between the console tests and winium tests is that, winium tests ran out of the console will be ran multiple times due to the test runner. 
-What solved this was just making a project with one unit test with all test methods in it. 
+This includes a WebApp test result UI to see the results of all tests ran
+https://github.com/DavidPurdy1/Testing-DashBoard
+-----
+# Getting Started
+Download from the zip from the release for the test runner
 
+Clone this repo and https://github.com/DavidPurdy1/Testing-DashBoard 
 
-Git Repos
+Set any configurations
+
+Run the Testing Dashboard and choose the test you want to run
+-----
+# Features to Add 
+
+- Add annotations (Unimplemented Exeception)
+
+- Port to winApp driver
+
+# Features Added 
+
+- Creation of Types and definitions and documents
+
+- Logging in or connecting to a remote desktop (Set the path for the application and the user) 
+
+- Adding Documents to InZone (set up the InZone definitions and documents in the right path for it to work)
+
+- Adding Documents through batch review(Set up the definition and type for batch review)
+
+- If failed can take screenshots then adds them to a word document
+
+- Config file so it can be set up on any machine
+
+- Default values for everything, but option to specify exactly what you want for most of the tests. Trying to balance ease and customization of the tests 
+
+- Inzone recoginizes correct definitions when coming in. 
+
+- Fail file to tell you which tests failed and passed
+
+- Logout and log back into intact testing
+
+- Search to determine if something is there
+
+- Support for recognition
+
+- Check for both interruptions and for errors thrown by the application

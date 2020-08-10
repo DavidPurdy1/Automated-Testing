@@ -18,3 +18,5 @@ C:\Users\i00018\source\repos\Console Tests\obj\Debug\Console Tests.csproj.CopyCo
 C:\Users\i00018\source\repos\Console Tests\obj\Debug\Console Tests.dll
 C:\Users\i00018\source\repos\Console Tests\obj\Debug\Console Tests.pdb
 C:\Users\i00018\source\repos\Console Tests\bin\Debug\Console Tests.dll.config
+C:\Users\i00018\source\repos\Console Tests\bin\Debug\WebDriver.Support.dll
+C:\Users\i00018\source\repos\Console Tests\bin\Debug\WebDriver.Support.xml

@@ -37,11 +37,9 @@ namespace ConsoleTests.src {
             Thread.Sleep(5000);
             m.Click(By.Id("btnClose"));
         }
-        /** Tests Intact Recognition
-         * definitionName: definition of what you want to recognize
-         * documentName: document name
-         * input: string to search to see if the page recognizes it
-         */
+        /// <summary><para>Tests Intact Recognition</para>
+        /// <para>definitionName: definition of what you want to recognize, documentName: document name,input: string to search to see if the page recognizes it </para>
+        /// </summary>
         public void Recognition(string definitionName, string documentName, string input) {
             CreateDocumentForRecognize(); 
             AddRecognition();
@@ -68,9 +66,7 @@ namespace ConsoleTests.src {
             m.Click(By.Id("btnCancel"));
             m.Click(By.Id("btnClose"));
         }
-        /** Searches intact for a keyword
-        *  searchInput: string put in searchBar
-        */
+        /// <summary>Searches intact for a keyword</summary>
         public void Search(string searchInput) {
             method = MethodBase.GetCurrentMethod().Name;
             window = m.Locate(By.Id("frmIntactMain"));

@@ -24,10 +24,7 @@ namespace ConsoleTests.src {
             this.debugLog = debugLog; 
         }
 
-        /**
-        * This method is going to add documents to batch review and then run through and both add a document to an existing document and attribute a new one.
-        * Does usually run slow
-        */
+        /// <summary> This method is going to add documents to batch review and then run through and both add a document to an existing document and attribute a new one.</summary>
         public void BatchReview() {
             method = MethodBase.GetCurrentMethod().Name;
             AddDocsToCollector();
@@ -113,10 +110,10 @@ namespace ConsoleTests.src {
             m.Click(By.Id("btnSave"), window);
             m.Click(By.Id("btnClose"), window);
         }
-        /**
-         * Collects documents by all definition from InZone.
-         * Returns true if the definition recognized is the same name as a file in directory
-         */
+        /// <summary>
+        /// Collects documents by all definition from InZone.
+        /// </summary>
+        /// <returns>Throws an AssertFail if the definition recognized is not the same name as a file in directory</returns>
         public void InZone() {
             method = MethodBase.GetCurrentMethod().Name;
             AddDocsToCollector();

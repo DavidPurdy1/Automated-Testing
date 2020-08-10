@@ -66,7 +66,7 @@ namespace ConsoleTests
             }
             else
             {
-                imagePaths.Add(user.Cleanup().OnFail(TestContext.TestName) + ".PNG");
+                imagePaths.Add(user.Cleanup().TakeScreenshot(TestContext.TestName) + ".PNG");
                 testsFailedNames.Add(TestContext.TestName);
                 Print(method, "FAILED *****************************************");
             }
@@ -93,8 +93,7 @@ namespace ConsoleTests
         {
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
-            user.Cleanup().CheckForIntactErrorMessage();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_2_INZONE()
@@ -102,7 +101,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.DocumentCollect().InZone();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_3_BATCHREVIEW()
@@ -110,7 +109,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.DocumentCollect().BatchReview();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_4_DEFINITIONS()
@@ -118,7 +117,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateNewDefinition();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_5_TYPES()
@@ -126,7 +125,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateNewType();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_6_DOCUMENTS()
@@ -134,7 +133,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateDocument(1, true);
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_7_SEARCH()
@@ -142,7 +141,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.SearchRecognize().Search("Default");
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_8_RECOGNITION()
@@ -150,7 +149,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.SearchRecognize().Recognition("DEFAULT DOCUMENT OPTIONS", "DEFAULT DOCUMENT", "lorem");
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST2_1_IPACK()
@@ -158,7 +157,8 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Misc().AddToIPack();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
+
         }
         [TestMethod]
         public void TEST2_2_LOGOUT()
@@ -166,7 +166,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Setup().Logout();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST2_3_AUDITTRAIL()
@@ -174,7 +174,7 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Misc().AuditTrail();
-            user.Cleanup().CheckForInterruptions();
+            user.Cleanup().EndOfTestCheck();
         }
         #endregion
 

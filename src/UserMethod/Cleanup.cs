@@ -6,12 +6,9 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
-using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Windows.Forms;
 
-namespace ConsoleTests.src
-{
+namespace ConsoleTests.src {
     /// <summary>
     /// Class containing methods used at the end of a test case or test run.
     /// </summary>
@@ -26,7 +23,7 @@ namespace ConsoleTests.src
             this.m = m;
             this.debugLog = debugLog;
         }
-        public string OnFail(string testName, string folderPath = "")
+        public string TakeScreenshot(string testName, string folderPath = "")
         {
             if (folderPath.Length < 2){folderPath = ConfigurationManager.AppSettings.Get("AutomationScreenshots");}
 
@@ -39,6 +36,10 @@ namespace ConsoleTests.src
             m.GetScreenshot().SaveAsFile(path + ".PNG", ImageFormat.Png);
             return path;
         }
+        ///<summary>
+        ///<para>Writes .txt for the DataExporter to parse</para>
+        ///<para>Edits to this must be reflected in the data exporter class</para>
+        ///</summary>
         public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames,List<string> testsInconclusiveNames, List<string> imagePaths)
         {
             method = MethodBase.GetCurrentMethod().Name;
@@ -79,23 +80,34 @@ namespace ConsoleTests.src
                 }
             }
         }
-        public void CheckForInterruptions()
+        private void CheckForInterruptions(bool toggleInterruptCheck)
         {
-            if (m.GetTopLevelWindowInformation("process") != "Intact")
-            {
-                Print(MethodBase.GetCurrentMethod().Name, "The current top window isn't intact, test interrupted");
-                throw new AssertInconclusiveException("The current top window is not intact, test interrupted"); 
+            if (toggleInterruptCheck) { 
+                if (m.GetTopLevelWindowInformation("process") != "Intact") {
+                    Print(MethodBase.GetCurrentMethod().Name, "The current top window isn't intact, test interrupted");
+                    throw new AssertInconclusiveException("The current top window is not intact, test interrupted");
+                }
             }
         }
-        public void CheckForIntactErrorMessage() {
-            Process[] pname = Process.GetProcessesByName("dotnet.exe"); //fix 
-            if (pname.Length == 0) {
-                Print(method, "TRRUE");
+        private void CheckForIntactErrorMessage(bool toggleErrorCheck) {
+            if (toggleErrorCheck) {
+                method = MethodBase.GetCurrentMethod().Name;
+                Process[] processes = Process.GetProcessesByName(ConfigurationManager.AppSettings.Get("IntactErrorMsg"));
+                if (processes.Length > 0) {
+                    Print(method, "Cleanup detects a dotnet error message: If you have a dotnet process running that is not the error close it or change the settings to configure for the error");
+                    throw new AssertFailedException("Cleanup detects a dotnet error message");
+                } else {
+                    Print(method, "there is no error present at end of test error check");
+                }
             }
-            else {
-                Print(method, "False");
-            }
-
+        }
+        ///<summary>
+        ///<para>Default checks on call for both interruptions and for errors at end of testcase</para>
+        ///<para>Throws AssertFail if there is an error present, Throws AssertInconclusive if Intact is not top window</para>
+        ///</summary>
+        public void EndOfTestCheck(bool errorcheck = true, bool interuptcheck = true) {
+            CheckForIntactErrorMessage(errorcheck); 
+            CheckForInterruptions(interuptcheck); 
         }
         public void SendToDB()
         {
@@ -107,9 +119,8 @@ namespace ConsoleTests.src
         {
             m.CloseDriver();
         }
-        /**Unimplemented
-         */
         public void WriteFailToWord() {
+            throw new NotImplementedException(); 
             //method = MethodBase.GetCurrentMethod().Name;
             //Microsoft.Office.Interop.Word.Application word = new Microsoft.Office.Interop.Word.Application();
             //Document wordDoc = word.Documents.Add();

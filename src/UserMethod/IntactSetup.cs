@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Winium;
+using System;
 using System.Configuration;
 using System.Threading;
 
@@ -15,9 +16,7 @@ namespace ConsoleTests.src {
         public IntactSetup(WiniumMethods m) {
             this.m = m;
         }
-        /**Logins to Intact
-         * Has to be ran before any other test.
-         */
+        /// <summary> Login to Intact: Has to be ran before any other testcase</summary>
         public void Login() {
             bool needToSetDB = ConfigurationManager.AppSettings.Get("setDataBase") == "true";
             Thread.Sleep(10000);
@@ -33,6 +32,7 @@ namespace ConsoleTests.src {
             m.Click(By.Name("Log Out"), window);
         }
         private void SetDatabaseInformation() {
+            throw new NotImplementedException();
             m.Click(By.Name("&Settings.."));
             m.SendKeys(By.Name(""), @"(local)\INTACT");
             m.SendKeys(By.Name(""), "{TAB}");
@@ -40,6 +40,7 @@ namespace ConsoleTests.src {
             m.SendKeys(By.Name(""), "{ENTER}");
         }
         private void ConnectToRemoteDesktop(DesktopOptions options, string serverName) {
+            throw new NotImplementedException();
             //method = MethodBase.GetCurrentMethod().Name;
             //Print(method, "Started");
 

@@ -8,6 +8,7 @@ using System.Threading;
 namespace ConsoleTests.src {
     /// <summary>
     /// Methods that arent typically ran but are good for regression
+    /// <para>Warning: Some of these are not entirely implemented</para>
     /// </summary>
     public class Misc {
         #region

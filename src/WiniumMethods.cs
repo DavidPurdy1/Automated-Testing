@@ -4,7 +4,6 @@ using OpenQA.Selenium;
 using OpenQA.Selenium.Winium;
 using System;
 using System.Reflection;
-using System.Runtime.InteropServices;
 
 namespace ConsoleTests.src {
     /// <summary>
@@ -19,7 +18,10 @@ namespace ConsoleTests.src {
             this.driver = driver;
             debugLog = log;
         }
-
+        /// <summary>
+        /// Used to locate elements on the page by name, id, or class name
+        /// <return>Located Element</return>
+        /// </summary>
         public IWebElement Locate(By by) {
             method = MethodBase.GetCurrentMethod().Name;
             try {
@@ -31,6 +33,10 @@ namespace ConsoleTests.src {
                 throw new AssertFailedException("Failed on " + method + " Finding element" + by.ToString());
             }
         }
+        /// <summary>
+        /// Used to locate elements on the page by name, id, or class name specifying a parent element
+        /// <return>Located Element</return>
+        /// </summary>
         public IWebElement Locate(By by, IWebElement parent) {
             method = MethodBase.GetCurrentMethod().Name;
             try {
@@ -112,12 +118,18 @@ namespace ConsoleTests.src {
                 throw new AssertFailedException(method + "Could not send element: Not on Screen " + by.ToString());
             }
         }
+        /// <summary> Checks if element is on the page by name, id, or class name </summary>
+        /// <returns>Bool: If element is present</returns>
         public bool IsElementPresent(By by) {
             return driver.FindElements(by).Count > 0;
         }
+        /// <summary> Checks if element is on the page by name, id, or class name specifying parent</summary>
+        /// <returns>Bool: If element is present</returns>
         public bool IsElementPresent(By by, IWebElement parent) {
             return parent.FindElements(by).Count > 0;
         }
+        /// <summary>Gets top level window: the only info type that can be specified is "process"</summary>
+        /// <returns>string: the name of the process or title of the window</returns>
         public string GetTopLevelWindowInformation(string infotype) {
             method = MethodBase.GetCurrentMethod().Name;
             WindowData data = new WindowData();

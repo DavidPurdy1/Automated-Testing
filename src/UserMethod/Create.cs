@@ -32,9 +32,9 @@ namespace ConsoleTests.src {
                 m.Click(By.Name("Maximize"), window);
             }
         }
-
-        /**This is going to a specified amount of definitions with random name for each blank.
-       */
+        /// <summary>
+        /// This is going to a specified amount of definitions with random name for each blank
+        /// </summary>
         public void CreateNewDefinition(int? numberOfDefinitions = 1, string definitionName = "") {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
@@ -70,9 +70,9 @@ namespace ConsoleTests.src {
             m.Click(By.Name("&Close"));
             Print(method, "Finished");
         }
-        /**Going to create a new type and will add random values for all of blanks.
-         * numberOfTypes: specify how many you want to add
-         */
+        /// <summary><para>This is going to a specified amount of definitions with random name for each blank </para>
+        /// <para>numberOfTypes: how many to create, typeName: What to name the types </para>
+        /// </summary>
         public void CreateNewType(int? numberOfTypes = 1, string typeName = "") {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
@@ -109,8 +109,9 @@ namespace ConsoleTests.src {
             m.Click(By.Name("&Close"));
             Print(method, "Finished");
         }
-        /**Faster Creation of a Document
-        */
+        /// <summary><para>Fast Creation of a document</para>
+        /// <para>isPDF: Pdf or tif, docPath: specify where document is located, filenumber: which document in a certain directory </para>
+        /// </summary>
         public void SimpleCreateDocument(bool isPDF = true, string docPath = "", int? fileNumber = 0) {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
@@ -159,12 +160,9 @@ namespace ConsoleTests.src {
             m.Click(By.Id("btnClose"));
             Print(method, "Finished");
         }
-        /**Creates docs
-     * numOfDocs: specifies how many to create
-     * if isPDF = true --> gets pdf from the directory, else tif 
-     * docPath: allows you to specify the directory of docs, default is set in config
-     * fileNumber: allows you to specify which file you want to use
-     */
+        /// <summary><para>Creation of Documents</para>
+        /// <para>numOfDocs: specifies how many to create, isPDF: pdf or tif,docPath: allows you to specify the directory of docs, default is set in config, filenumber: which document in a certain directory </para>
+        /// </summary>
         public void CreateDocument(int? numOfDocs = 1, bool isPDF = true, string docPath = "", int? fileNumber = 0) {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
@@ -230,10 +228,9 @@ namespace ConsoleTests.src {
                 Print(method, "Finished");
             }
         }
-        /**Unable to implement without change to Winium Source code
-         * Fairly simple change
-         */ 
+        /// <summary><para>Not Implemented</para></summary>
         private void AddAnnotations() {
+            throw new NotImplementedException();
             Print(method, "x: " + Cursor.Position.X + " y: " + Cursor.Position.Y);
             m.Click(By.Id("lblType"));
             Print(method, "x: " + Cursor.Position.X + " y: " + Cursor.Position.Y);
