@@ -70,6 +70,7 @@ namespace ConsoleTests
                 testsFailedNames.Add(TestContext.TestName);
                 Print(method, "FAILED *****************************************");
             }
+            user.Cleanup().DisposeErrorMessages();
             user.Cleanup().CloseDriver();
         }
         [ClassCleanup]
@@ -174,6 +175,14 @@ namespace ConsoleTests
             method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Misc().AuditTrail();
+            user.Cleanup().EndOfTestCheck();
+        }
+        [TestMethod]
+        public void Test()
+        {
+            method = MethodBase.GetCurrentMethod().Name;
+            user.Setup().Login();
+            user.Create().CreateDocumentWithCheck();
             user.Cleanup().EndOfTestCheck();
         }
         #endregion

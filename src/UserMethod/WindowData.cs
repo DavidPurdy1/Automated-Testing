@@ -1,13 +1,14 @@
+using System.Linq;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
-
+using System;
 namespace ConsoleTests
 {
     /// <summary>
     /// This is used to get the name of the current window in focus as well as the process of the window. 
     /// </summary>
-    class WindowData
+    public class WindowData
     {
         public string WindowTitle { get; set; }
         public string WindowProcess { get; set; }
@@ -20,6 +21,8 @@ namespace ConsoleTests
 
         [DllImport("user32.dll", SetLastError = true)]
         static extern uint GetWindowThreadProcessId(int hWnd, out uint lpdwProcessId);
+        [DllImport("user32.dll")]
+        static extern bool SetForegroundWindow(IntPtr hWnd);
         public void GetActiveWindow()
         {
             const int nChars = 256;
@@ -40,6 +43,10 @@ namespace ConsoleTests
 
                 WindowProcess = Process.GetProcessById((int)lpdwProcessId).ProcessName;
             }
+        }
+        public void SetAsTopWindow(Process current)
+        {
+            SetForegroundWindow(current.MainWindowHandle);
         }
     }
 }

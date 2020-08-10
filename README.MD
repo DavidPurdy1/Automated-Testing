@@ -4,6 +4,7 @@ A library built for Automated testing of Intact using Winium Driver.
 
 This includes a WebApp test result UI to see the results of all tests ran
 https://github.com/DavidPurdy1/Testing-DashBoard
+
 -----
 # Getting Started
 Download from the zip from the release for the test runner
@@ -13,10 +14,17 @@ Clone this repo and https://github.com/DavidPurdy1/Testing-DashBoard
 Set any configurations
 
 Run the Testing Dashboard and choose the test you want to run
+
 -----
 # Features to Add 
 
-- Add annotations (Unimplemented Exeception)
+- Create unique id to track the document on a test case. Validate that a test has passed by accessing it's metadata in the document table. Input the data into a document and confirm the data is the same once compared by exporting it to the table. 
+
+- Have it be able to enter in a unique document name to track it under the test type
+
+- Create more columns to track the guid of a document or login, create a description of the test that accesses the method summary and the line that it failed on, add a modifier description where they can add details to further communicate a pass or fail. 
+
+- Add annotations (Unimplemented Exeception) 
 
 - Port to winApp driver
 

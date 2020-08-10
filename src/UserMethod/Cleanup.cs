@@ -8,7 +8,8 @@ using System.IO;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace ConsoleTests.src {
+namespace ConsoleTests.src
+{
     /// <summary>
     /// Class containing methods used at the end of a test case or test run.
     /// </summary>
@@ -25,7 +26,7 @@ namespace ConsoleTests.src {
         }
         public string TakeScreenshot(string testName, string folderPath = "")
         {
-            if (folderPath.Length < 2){folderPath = ConfigurationManager.AppSettings.Get("AutomationScreenshots");}
+            if (folderPath.Length < 2) { folderPath = ConfigurationManager.AppSettings.Get("AutomationScreenshots"); }
 
             //YYYY-MM-DD__HH-MM-SS
             string dateAndTime = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "__"
@@ -40,7 +41,7 @@ namespace ConsoleTests.src {
         ///<para>Writes .txt for the DataExporter to parse</para>
         ///<para>Edits to this must be reflected in the data exporter class</para>
         ///</summary>
-        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames,List<string> testsInconclusiveNames, List<string> imagePaths)
+        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames, List<string> testsInconclusiveNames, List<string> imagePaths)
         {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
@@ -75,39 +76,52 @@ namespace ConsoleTests.src {
                 {
                     file.WriteLine("passed| " + name);
                 }
-                foreach (string name in testsInconclusiveNames) {
+                foreach (string name in testsInconclusiveNames)
+                {
                     file.WriteLine("cancel| " + name);
                 }
             }
         }
         private void CheckForInterruptions(bool toggleInterruptCheck)
         {
-            if (toggleInterruptCheck) { 
-                if (m.GetTopLevelWindowInformation("process") != "Intact") {
+            if (toggleInterruptCheck)
+            {
+                if (m.GetTopLevelWindowInformation("process") != "Intact")
+                {
                     Print(MethodBase.GetCurrentMethod().Name, "The current top window isn't intact, test interrupted");
                     throw new AssertInconclusiveException("The current top window is not intact, test interrupted");
                 }
             }
         }
-        private void CheckForIntactErrorMessage(bool toggleErrorCheck) {
-            if (toggleErrorCheck) {
+        private void CheckForIntactErrorMessage(bool toggleErrorCheck)
+        {
+            if (toggleErrorCheck)
+            {
                 method = MethodBase.GetCurrentMethod().Name;
-                Process[] processes = Process.GetProcessesByName(ConfigurationManager.AppSettings.Get("IntactErrorMsg"));
-                if (processes.Length > 0) {
-                    Print(method, "Cleanup detects a dotnet error message: If you have a dotnet process running that is not the error close it or change the settings to configure for the error");
-                    throw new AssertFailedException("Cleanup detects a dotnet error message");
-                } else {
-                    Print(method, "there is no error present at end of test error check");
+
+                foreach (Process process in Process.GetProcesses())
+                {
+                    if (!String.IsNullOrEmpty(process.MainWindowTitle))
+                    {
+                        if (process.MainWindowTitle.Contains("Error") || process.MainWindowTitle.Contains("Exception"))
+                        {
+                            m.setTopLevelWindow(process);
+                            Print(method, "Cleanup detects an error message:");
+                            throw new AssertFailedException("Cleanup detects an error message");
+                        }
+                    }
                 }
+                Print(method, "There is no error present");
             }
         }
         ///<summary>
         ///<para>Default checks on call for both interruptions and for errors at end of testcase</para>
         ///<para>Throws AssertFail if there is an error present, Throws AssertInconclusive if Intact is not top window</para>
         ///</summary>
-        public void EndOfTestCheck(bool errorcheck = true, bool interuptcheck = true) {
-            CheckForIntactErrorMessage(errorcheck); 
-            CheckForInterruptions(interuptcheck); 
+        public void EndOfTestCheck(bool errorcheck = true, bool interuptcheck = true)
+        {
+            CheckForIntactErrorMessage(errorcheck);
+            CheckForInterruptions(interuptcheck);
         }
         public void SendToDB()
         {
@@ -115,12 +129,28 @@ namespace ConsoleTests.src {
             DataExporter exporter = new DataExporter(connectionString);
             exporter.ParseFile(new TestData());
         }
+        public void DisposeErrorMessages()
+        {
+            foreach (Process process in Process.GetProcesses())
+            {
+                if (!String.IsNullOrEmpty(process.MainWindowTitle))
+                {
+                    var title = process.MainWindowTitle;
+                    if (title.Contains("Error") || title.Contains("Exception") || title.Contains("exception") || title.Contains("error"))
+                    {
+                        process.Kill();
+                        Print(method, "error killed");
+                    }
+                }
+            }
+        }
         public void CloseDriver()
         {
             m.CloseDriver();
         }
-        public void WriteFailToWord() {
-            throw new NotImplementedException(); 
+        public void WriteFailToWord()
+        {
+            throw new NotImplementedException();
             //method = MethodBase.GetCurrentMethod().Name;
             //Microsoft.Office.Interop.Word.Application word = new Microsoft.Office.Interop.Word.Application();
             //Document wordDoc = word.Documents.Add();
