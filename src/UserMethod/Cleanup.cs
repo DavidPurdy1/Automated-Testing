@@ -84,11 +84,13 @@ namespace ConsoleTests.src
         }
         private void CheckForInterruptions(bool toggleInterruptCheck)
         {
+            method = MethodBase.GetCurrentMethod().Name;
             if (toggleInterruptCheck)
             {
                 if (m.GetTopLevelWindowInformation("process") != "Intact")
                 {
-                    Print(MethodBase.GetCurrentMethod().Name, "The current top window isn't intact, test interrupted");
+                    Print(method, m.GetTopLevelWindowInformation("process") + " || " + m.GetTopLevelWindowInformation(""));
+                    Print(method, "The current top window isn't intact, test interrupted");
                     throw new AssertInconclusiveException("The current top window is not intact, test interrupted");
                 }
             }

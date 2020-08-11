@@ -18,7 +18,7 @@ Run the Testing Dashboard and choose the test you want to run
 -----
 # Features to Add 
 
-- Create unique id to track the document on a test case. Validate that a test has passed by accessing it's metadata in the document table. Input the data into a document and confirm the data is the same once compared by exporting it to the table. 
+- Once the document is validated the intact window loses focus and then it throws and interruption because it loses focus. Test passes but outcomes a incomplete
 
 - Have it be able to enter in a unique document name to track it under the test type
 
