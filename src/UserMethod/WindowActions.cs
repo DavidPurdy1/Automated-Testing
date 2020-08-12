@@ -1,14 +1,14 @@
-using System.Linq;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using System;
+
 namespace ConsoleTests
 {
     /// <summary>
     /// This is used to get the name of the current window in focus as well as the process of the window. 
     /// </summary>
-    public class WindowData
+    public class WindowActions
     {
         public string WindowTitle { get; set; }
         public string WindowProcess { get; set; }

@@ -92,14 +92,12 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_1_LOGIN()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
         public void TEST1_2_INZONE()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.DocumentCollect().InZone();
             user.Cleanup().EndOfTestCheck();
@@ -107,7 +105,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_3_BATCHREVIEW()
         { //Batch review runs slow      
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.DocumentCollect().BatchReview();
             user.Cleanup().EndOfTestCheck();
@@ -115,7 +112,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_4_DEFINITIONS()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateNewDefinition();
             user.Cleanup().EndOfTestCheck();
@@ -123,7 +119,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_5_TYPES()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateNewType();
             user.Cleanup().EndOfTestCheck();
@@ -131,7 +126,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_6_DOCUMENTS()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateDocument(1, true);
             user.Cleanup().EndOfTestCheck();
@@ -139,7 +133,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_7_SEARCH()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.SearchRecognize().Search("Default");
             user.Cleanup().EndOfTestCheck();
@@ -147,7 +140,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST1_8_RECOGNITION()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.SearchRecognize().Recognition("DEFAULT DOCUMENT OPTIONS", "DEFAULT DOCUMENT", "lorem");
             user.Cleanup().EndOfTestCheck();
@@ -155,7 +147,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST2_1_IPACK()
         { //unfinished
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Misc().AddToIPack();
             user.Cleanup().EndOfTestCheck();
@@ -164,7 +155,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST2_2_LOGOUT()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Setup().Logout();
             user.Cleanup().EndOfTestCheck();
@@ -172,7 +162,6 @@ namespace ConsoleTests
         [TestMethod]
         public void TEST2_3_AUDITTRAIL()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Misc().AuditTrail();
             user.Cleanup().EndOfTestCheck();
@@ -180,7 +169,6 @@ namespace ConsoleTests
         [TestMethod]
         public void Test()
         {
-            method = MethodBase.GetCurrentMethod().Name;
             user.Setup().Login();
             user.Create().CreateDocumentWithCheck();
             user.Cleanup().EndOfTestCheck();

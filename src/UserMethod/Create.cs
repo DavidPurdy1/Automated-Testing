@@ -236,6 +236,7 @@ namespace ConsoleTests.src
                 m.Click(By.Name("DEFAULT DEF"));
                 m.Click(By.Name("&OK"));
                 m.Click(By.Id("btnClose"));
+                m.Click(By.Id("frmIntactMain"));
                 Print(method, "Finished the document addition");
                 Thread.Sleep(5000);
                 VerifyDocumentAdd(guid, date, number);

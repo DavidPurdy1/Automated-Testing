@@ -178,8 +178,7 @@ namespace ConsoleTests.src
         /// <returns>string: the name of the process or title of the window</returns>
         public string GetTopLevelWindowInformation(string infotype)
         {
-            method = MethodBase.GetCurrentMethod().Name;
-            WindowData data = new WindowData();
+            WindowActions data = new WindowActions();
             data.GetActiveWindow();
 
             if (infotype.Equals("process"))
@@ -190,8 +189,8 @@ namespace ConsoleTests.src
         }
         public void setTopLevelWindow(Process p)
         {
-            Print(method, "Process: {" + p.ProcessName + "} ID: {" + p.Id + "} Window title: {" + p.MainWindowTitle + "}");
-            new WindowData().SetAsTopWindow(p);
+            Print(MethodBase.GetCurrentMethod().Name, "Process: {" + p.ProcessName + "} ID: {" + p.Id + "} Window title: {" + p.MainWindowTitle + "}");
+            new WindowActions().SetAsTopWindow(p);
         }
         public Screenshot GetScreenshot()
         {
