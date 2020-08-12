@@ -52,7 +52,7 @@ namespace ConsoleTests.src
 
             //writes the result file information
             using (StreamWriter file =
-            new StreamWriter(ConfigurationManager.AppSettings.Get("TestResultFiles") + dateAndTime + ".txt", false))
+            new StreamWriter(ConfigurationManager.AppSettings.Get("FileLocation") + dateAndTime + ".txt", false))
             {
                 var versionInfo = FileVersionInfo.GetVersionInfo(ConfigurationManager.AppSettings.Get("IntactPath"));
                 string version = versionInfo.FileVersion;
@@ -149,6 +149,16 @@ namespace ConsoleTests.src
         public void CloseDriver()
         {
             m.CloseDriver();
+        }
+        public void CloseExtraDriverInstances()
+        {
+            foreach (Process process in Process.GetProcesses())
+            {
+                if (process.ProcessName.Contains("Winium.Desktop"))
+                {
+                    process.Kill();
+                }
+            }
         }
         public void WriteFailToWord()
         {

@@ -78,6 +78,7 @@ namespace ConsoleTests
         {
             user.Cleanup().WriteFailFile(testsFailedNames, testsPassedNames, testsInconclusiveNames, imagePaths);
             user.Cleanup().SendToDB();
+            user.Cleanup().CloseExtraDriverInstances();
         }
         #endregion
 
@@ -127,7 +128,7 @@ namespace ConsoleTests
         public void TEST1_6_DOCUMENTS()
         {
             user.Setup().Login();
-            user.Create().CreateDocument(1, true);
+            user.Create().CreateDocumentWithCheck();
             user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
@@ -150,7 +151,6 @@ namespace ConsoleTests
             user.Setup().Login();
             user.Misc().AddToIPack();
             user.Cleanup().EndOfTestCheck();
-
         }
         [TestMethod]
         public void TEST2_2_LOGOUT()
@@ -166,14 +166,6 @@ namespace ConsoleTests
             user.Misc().AuditTrail();
             user.Cleanup().EndOfTestCheck();
         }
-        [TestMethod]
-        public void Test()
-        {
-            user.Setup().Login();
-            user.Create().CreateDocumentWithCheck();
-            user.Cleanup().EndOfTestCheck();
-        }
         #endregion
-
     }
 }

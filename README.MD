@@ -17,8 +17,13 @@ Run the Testing Dashboard and choose the test you want to run
 
 -----
 # Features to Add 
+- Add documentation to the jira wiki on stuff like test cases, update running a test, etc....
 
-- Once the document is validated the intact window loses focus and then it throws and interruption because it loses focus. Test passes but outcomes a incomplete
+- Add corrrelation to guid of the document added and test case this could be on a new table linked at the test case level
+
+- Common Error: Once the document is validated the intact window loses focus and then it throws and interruption because it loses focus. Test passes but outcomes a incomplete
+
+- Add a scheduler to have the tests run at a certain time or interval
 
 - Have it be able to enter in a unique document name to track it under the test type
 

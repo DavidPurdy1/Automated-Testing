@@ -8,6 +8,10 @@ using System;
 
 namespace ConsoleTests.src
 {
+    /// <summary>
+    ///<para>Verifies that a document is filed correctly by testing name(guid) and metadata are going to be the same</para>
+    /// <para>Throws an assertfail for the test if the information passed in and what is found in the sql table is not the same</para>
+    /// </summary>
     public class DataRetrieval
     {
         private ILog debugLog;
@@ -15,11 +19,11 @@ namespace ConsoleTests.src
         {
             this.debugLog = debugLog;
         }
-        public void ValidateDocumentAdd(string guid, string date, string number)
+        public void ValidateDocumentAdd(string guid, DateTime date, string number)
         {
             string num = "";
             string method = MethodBase.GetCurrentMethod().Name;
-            SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("DBDocumentData"));
+            SqlConnection connection = new SqlConnection(ConfigurationManager.AppSettings.Get("DBConnection"));
             connection.Open();
             SqlCommand command = new SqlCommand();
             command.CommandTimeout = 60;
