@@ -3,17 +3,24 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-
-namespace ConsoleTests.src {
+using log4net;
+namespace ConsoleTests.src
+{
     /// <summary>
     /// Exports Parsed Data from the .txt file the tests output on cleanup and sends that to sql tables
     /// </summary>
-    class DataExporter {
+    class DataExporter
+    {
         private readonly SqlConnection connection;
-        public DataExporter(string connectionString) {
+        private ILog debugLog;
+        public int DocumentIdCount { get; set; }
+        public DataExporter(string connectionString, ILog debugLog)
+        {
             connection = new SqlConnection(connectionString);
+            this.debugLog = debugLog;
         }
-        private void AddToTestRunTable(TestData data) {
+        private void AddToTestRunTable(TestData data)
+        {
 
             //running the command
             SqlCommand command = new SqlCommand();
@@ -38,7 +45,8 @@ namespace ConsoleTests.src {
             data.TestRunId = int.Parse(command.ExecuteScalar().ToString());
             connection.Close();
         }
-        private void AddToTestCaseTable(TestData data) {
+        private void AddToTestCaseTable(TestData data)
+        {
             //running the command
             SqlCommand command = new SqlCommand();
             connection.Open();
@@ -61,8 +69,25 @@ namespace ConsoleTests.src {
             command.ExecuteNonQuery();
             connection.Close();
         }
-        public void ParseFile(TestData data) {
-            foreach (string file in Directory.EnumerateFiles(ConfigurationManager.AppSettings.Get("FileLocation"))) {
+        private void AddToDocumentDataTable(TestData data, string s)
+        {
+            //running the command
+            SqlCommand command = new SqlCommand();
+            connection.Open();
+            command.CommandTimeout = 60;
+            command.Connection = connection;
+            command.CommandType = CommandType.StoredProcedure;
+            command.CommandText = "spAddTestCaseData";
+
+            command.Parameters.Add("documentGuid", SqlDbType.NVarChar, 256).Value = s;
+
+            command.ExecuteNonQuery();
+            connection.Close();
+        }
+        public void ParseFile(TestData data)
+        {
+            foreach (string file in Directory.EnumerateFiles(ConfigurationManager.AppSettings.Get("FileLocation")))
+            {
                 string[] lines = File.ReadAllLines(file);
 
                 //all the information for the test runs is here
@@ -78,29 +103,77 @@ namespace ConsoleTests.src {
                 //The test case names, test case status, image path all assigned here.
                 //Some of the data from above is used in the test case table
                 int i = 7;
-                while (i < lines.Length) {
+
+                while (i < lines.Length)
+                {
                     data.TestName = lines[i].Substring(8);
-                    if (lines[i].Substring(0, 8).Equals("cancel| ")){
+
+                    if (lines[i].Substring(0, 8).Equals("cancel| "))
+                    {
                         data.TestStatus = 3;
                         data.ImagePath = null;
-                        i++;
+                        if (data.TestName.Equals("TEST1_6_DOCUMENTS"))
+                        {
+                            string[] values = lines[i + 1].Split(',');
+                            for (int j = 0; j < values.Length; j++)
+                            {
+                                AddToDocumentDataTable(data, values[j]);
+                            }
+                            i += 2;
+                        }
+                        else
+                        {
+                            i++;
+                        }
                     }
-                    else if (lines[i].Substring(0, 8).Equals("passed| ")) {
+                    else if (lines[i].Substring(0, 8).Equals("passed| "))
+                    {
                         data.TestStatus = 1;
                         data.ImagePath = null;
-                        i++;
-                    } else {
+                        if (data.TestName.Equals("TEST1_6_DOCUMENTS"))
+                        {
+                            string[] values = lines[i + 1].Split(',');
+                            for (int j = 0; j < values.Length; j++)
+                            {
+                                AddToDocumentDataTable(data, values[j]);
+                            }
+                            i += 2;
+                        }
+                        else
+                        {
+                            i++;
+                        }
+                    }
+                    else
+                    {
                         data.TestStatus = 0;
                         data.ImagePath = lines[i + 1];
-                        i += 2;
+                        if (data.TestName.Equals("TEST1_6_DOCUMENTS"))
+                        {
+                            string[] values = lines[i + 2].Split(',');
+                            for (int j = 0; j < values.Length; j++)
+                            {
+                                AddToDocumentDataTable(data, values[j]);
+                            }
+                            i += 3;
+                        }
+                        else
+                        {
+                            i += 2;
+                        }
                     }
                     AddToTestCaseTable(data);
                 }
                 File.Move(file, ConfigurationManager.AppSettings.Get("ReadFileLocation") + "Test " + (data.TestRunId - 1).ToString() + ".txt");
             }
         }
+        public void Print(string method, string toPrint)
+        {
+            debugLog.Info(method + " " + toPrint);
+        }
     }
-    class TestData {
+    class TestData
+    {
         public int TestsFailed { get; set; }
         public int TestsPassed { get; set; }
         public string CreatedBy { get; set; }
@@ -111,5 +184,6 @@ namespace ConsoleTests.src {
         public string TestName { get; set; }
         public int TestStatus { get; set; }
         public int TestRunId { get; set; }
+        public string documentIds { get; set; }
     }
 }

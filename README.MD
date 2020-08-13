@@ -25,8 +25,6 @@ Run the Testing Dashboard and choose the test you want to run
 
 - Add a scheduler to have the tests run at a certain time or interval
 
-- Have it be able to enter in a unique document name to track it under the test type
-
 - Create more columns to track the guid of a document or login, create a description of the test that accesses the method summary and the line that it failed on, add a modifier description where they can add details to further communicate a pass or fail. 
 
 - Add annotations (Unimplemented Exeception) 

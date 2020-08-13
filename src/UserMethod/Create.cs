@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using System.Collections.Generic;
+using log4net;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Interactions;
 using System;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using System.Windows.Forms;
+
 
 namespace ConsoleTests.src
 {
@@ -21,6 +23,7 @@ namespace ConsoleTests.src
         readonly Actions action;
         string method = "";
         readonly ILog debugLog;
+
         #endregion
 
         public Create(WiniumMethods m, Actions action, ILog debugLog)
@@ -184,11 +187,11 @@ namespace ConsoleTests.src
         ///<para>Creation of Documents</para>
         ///<para>numOfDocs: specifies how many to create, isPDF: pdf or tif,docPath: allows you to specify the directory of docs, default is set in config, filenumber: which document in a certain directory </para>
         ///</summary>
-        public void CreateDocumentWithCheck(int? numOfDocs = 1, bool isPDF = true, string docPath = "", int? fileNumber = 0)
+        public List<string> CreateDocumentWithCheck(int? numOfDocs = 1, bool isPDF = true, string docPath = "", int? fileNumber = 0)
         {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
-
+            List<string> documentIds = new List<string>();
             //check if maximized
             window = m.Locate(By.Id("frmIntactMain"));
             if (m.IsElementPresent(By.Name("Maximize"), window))
@@ -199,6 +202,7 @@ namespace ConsoleTests.src
             for (int i = 0; i < numOfDocs; i++)
             {
                 var guid = Guid.NewGuid().ToString();
+                documentIds.Add(guid);
                 m.Click(By.Name("Add Document"));
                 Thread.Sleep(3000);
                 m.Click(By.Id("lblType"));
@@ -241,6 +245,7 @@ namespace ConsoleTests.src
                 Thread.Sleep(5000);
                 new DataRetrieval(debugLog).ValidateDocumentAdd(guid, date, number);
             }
+            return documentIds;
         }
         //find the document to add in file explorer
         //configure docpath in app.config, takes arg of pdf or tif 

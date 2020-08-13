@@ -18,6 +18,7 @@ namespace ConsoleTests.src
         readonly WiniumMethods m;
         string method = "";
         readonly ILog debugLog;
+        private int documentIdCount = 0;
 
         public Cleanup(WiniumMethods m, ILog debugLog)
         {
@@ -41,12 +42,12 @@ namespace ConsoleTests.src
         ///<para>Writes .txt for the DataExporter to parse</para>
         ///<para>Edits to this must be reflected in the data exporter class</para>
         ///</summary>
-        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames, List<string> testsInconclusiveNames, List<string> imagePaths)
+        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames, List<string> testsInconclusiveNames, List<string> imagePaths, List<string> documentIds)
         {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");
-
-            //YYYY-MM-DD__HH-MM-SS
+            documentIdCount = documentIds.Count;
+            //YYYY-MM-DD__HH-MM-SS text file name
             string dateAndTime = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + "__"
                 + DateTime.Now.Hour.ToString() + "-" + DateTime.Now.Minute.ToString() + "-" + DateTime.Now.Second.ToString();
 
@@ -70,15 +71,36 @@ namespace ConsoleTests.src
                 {
                     file.WriteLine("failed| " + name);
                     file.WriteLine(imagePaths[i]);
+                    if (name.Equals("TEST1_6_DOCUMENTS"))
+                    {
+                        foreach (var guid in documentIds)
+                        {
+                            file.Write(guid + ", ");
+                        }
+                    }
                     i++;
                 }
                 foreach (string name in testsPassedNames)
                 {
                     file.WriteLine("passed| " + name);
+                    if (name.Equals("TEST1_6_DOCUMENTS"))
+                    {
+                        foreach (var guid in documentIds)
+                        {
+                            file.Write(guid + ", ");
+                        }
+                    }
                 }
                 foreach (string name in testsInconclusiveNames)
                 {
                     file.WriteLine("cancel| " + name);
+                    if (name.Equals("TEST1_6_DOCUMENTS"))
+                    {
+                        foreach (var guid in documentIds)
+                        {
+                            file.Write(guid + ",");
+                        }
+                    }
                 }
             }
         }
@@ -128,7 +150,8 @@ namespace ConsoleTests.src
         public void SendToDB()
         {
             string connectionString = ConfigurationManager.AppSettings.Get("DBConnection");
-            DataExporter exporter = new DataExporter(connectionString);
+            DataExporter exporter = new DataExporter(connectionString, debugLog);
+            exporter.DocumentIdCount = documentIdCount;
             exporter.ParseFile(new TestData());
         }
         public void DisposeErrorMessages()

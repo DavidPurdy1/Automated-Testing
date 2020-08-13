@@ -24,6 +24,7 @@ namespace ConsoleTests
         static readonly List<string> testsPassedNames = new List<string>();
         static readonly List<string> testsInconclusiveNames = new List<string>();
         static readonly List<string> imagePaths = new List<string>();
+        static readonly List<string> documentIds = new List<string>();
         public TestContext TestContext { get; set; }
         #endregion
 
@@ -76,7 +77,7 @@ namespace ConsoleTests
         [ClassCleanup]
         public static void Cleanup()
         {
-            user.Cleanup().WriteFailFile(testsFailedNames, testsPassedNames, testsInconclusiveNames, imagePaths);
+            user.Cleanup().WriteFailFile(testsFailedNames, testsPassedNames, testsInconclusiveNames, imagePaths, documentIds);
             user.Cleanup().SendToDB();
             user.Cleanup().CloseExtraDriverInstances();
         }
@@ -128,7 +129,10 @@ namespace ConsoleTests
         public void TEST1_6_DOCUMENTS()
         {
             user.Setup().Login();
-            user.Create().CreateDocumentWithCheck();
+            foreach (var s in user.Create().CreateDocumentWithCheck(2))
+            {
+                documentIds.Add(s);
+            }
             user.Cleanup().EndOfTestCheck();
         }
         [TestMethod]
