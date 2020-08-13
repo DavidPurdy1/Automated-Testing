@@ -42,7 +42,7 @@ namespace ConsoleTests.src
         ///<para>Writes .txt for the DataExporter to parse</para>
         ///<para>Edits to this must be reflected in the data exporter class</para>
         ///</summary>
-        public void WriteFailFile(List<string> testsFailedNames, List<string> testsPassedNames, List<string> testsInconclusiveNames, List<string> imagePaths, List<string> documentIds)
+        public void WriteFailFile()
         {
             method = MethodBase.GetCurrentMethod().Name;
             Print(method, "Started");

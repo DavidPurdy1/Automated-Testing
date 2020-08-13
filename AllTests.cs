@@ -20,12 +20,9 @@ namespace ConsoleTests
         static readonly ILog debugLog = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
         public string method;
         public static UserMethods user;
-        static readonly List<string> testsFailedNames = new List<string>();
-        static readonly List<string> testsPassedNames = new List<string>();
-        static readonly List<string> testsInconclusiveNames = new List<string>();
-        static readonly List<string> imagePaths = new List<string>();
-        static readonly List<string> documentIds = new List<string>();
-        public TestContext TestContext { get; set; }
+        public TestContext Context { get; set; }
+        public static TestRunObject TestRun;
+        public static TestCaseObject TestCase;
         #endregion
 
         #region Test Attributes
@@ -36,48 +33,27 @@ namespace ConsoleTests
             XmlConfigurator.Configure();
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
+            TestRun = new TestRunObject();
         }
         [TestInitialize]
         public void TestInit()
         {
-            method = MethodBase.GetCurrentMethod().Name;
-            foreach (Process app in Process.GetProcesses())
-            {
-                if (app.ProcessName.Equals("Intact"))
-                {
-                    app.Kill();
-                    Print(method, "Previous Intact Killed");
-                }
-            }
+            TestCase = new TestCaseObject(debugLog);
+            TestRun.TestCases.Add(TestCase);
             user = new UserMethods(debugLog);
-            Print(TestContext.TestName, "STARTED *********************************************");
         }
         [TestCleanup]
         public void TestCleanup()
         {
-            if (TestContext.CurrentTestOutcome == UnitTestOutcome.Inconclusive)
-            {
-                testsInconclusiveNames.Add(TestContext.TestName);
-                Print(method, "Interrupted *****************************************");
-            }
-            else if (TestContext.CurrentTestOutcome == UnitTestOutcome.Passed)
-            {
-                testsPassedNames.Add(TestContext.TestName);
-                Print(method, "PASSED *****************************************");
-            }
-            else
-            {
-                imagePaths.Add(user.Cleanup().TakeScreenshot(TestContext.TestName) + ".PNG");
-                testsFailedNames.Add(TestContext.TestName);
-                Print(method, "FAILED *****************************************");
-            }
+            Context.WriteLine("THIS IS TESTING THE PRINTING OF CONTEXT IN THE TRACE");
+            TestCase.AddTestCaseResult(Context.CurrentTestOutcome, Context.TestName);
             user.Cleanup().DisposeErrorMessages();
             user.Cleanup().CloseDriver();
         }
         [ClassCleanup]
         public static void Cleanup()
         {
-            user.Cleanup().WriteFailFile(testsFailedNames, testsPassedNames, testsInconclusiveNames, imagePaths, documentIds);
+            user.Cleanup().WriteFailFile();
             user.Cleanup().SendToDB();
             user.Cleanup().CloseExtraDriverInstances();
         }

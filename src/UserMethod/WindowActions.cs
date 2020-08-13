@@ -44,7 +44,7 @@ namespace ConsoleTests
                 WindowProcess = Process.GetProcessById((int)lpdwProcessId).ProcessName;
             }
         }
-        public void SetAsTopWindow(Process current)
+        public void SetAsActiveWindow(Process current)
         {
             SetForegroundWindow(current.MainWindowHandle);
         }

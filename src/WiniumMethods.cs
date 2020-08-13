@@ -190,7 +190,7 @@ namespace ConsoleTests.src
         public void setTopLevelWindow(Process p)
         {
             Print(MethodBase.GetCurrentMethod().Name, "Process: {" + p.ProcessName + "} ID: {" + p.Id + "} Window title: {" + p.MainWindowTitle + "}");
-            new WindowActions().SetAsTopWindow(p);
+            new WindowActions().SetAsActiveWindow(p);
         }
         public Screenshot GetScreenshot()
         {
